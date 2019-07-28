@@ -118,7 +118,13 @@ class bitbankcc_private(object):
             'order_ids': order_ids
         })
 
-    def get_trade_history(self, pair, order_count, order_id):
+    def get_trade_history(self, pair, order_count):
+        return self._get_query('/user/spot/trade_history?', {
+            'pair': pair,
+            'count': order_count
+        })
+
+    def get_trade_history_with_orderid(self, pair, order_count, order_id):
         return self._get_query('/user/spot/trade_history?', {
             'pair': pair,
             'count': order_count,
