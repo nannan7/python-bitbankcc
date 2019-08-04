@@ -77,7 +77,10 @@ class bitbankcc_private(object):
     
     def get_asset(self):
         return self._get_query('/user/assets', {})
-    
+
+    def get_status(self):
+        return self._get_query('/spot/status', {})
+
     def get_order(self, pair, order_id):
         return self._get_query('/user/spot/order?', {
             'pair': pair,
