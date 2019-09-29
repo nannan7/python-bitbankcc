@@ -32,7 +32,9 @@ def error_parser(json_dict):
         message = 'エラーコード: ' + code + ' 内容: ' + contents
         raise Exception(message)
 
+
 ERROR_CODES = {
+    '0': 'タイムアウトしました',
     '10000': 'URLが存在しません',
     '10001': 'システムエラーが発生しました。サポートにお問い合わせ下さい',
     '10002': '不正なJSON形式です。送信内容をご確認下さい',

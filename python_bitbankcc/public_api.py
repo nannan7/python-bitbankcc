@@ -27,34 +27,42 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from .utils import error_parser
 from logging import getLogger
 import requests
-
+from collections import defaultdict
 
 logger = getLogger(__name__)
 
 
 class bitbankcc_public(object):
-    
+
     def __init__(self):
         self.end_point = 'https://public.bitbank.cc'
-    
+
     def _query(self, query_url):
-        response = requests.get(query_url)
-        return error_parser(response.json())
-    
+        try:
+            response = requests.get(query_url, timeout=1.0)
+            return error_parser(response.json())
+
+        except Exception as e:
+            print(e.args)
+            tree = lambda: defaultdict(tree)
+            res = tree()
+            res['success'] = 0
+            res['data']['code'] = 0
+            return error_parser(res)
+
     def get_ticker(self, pair):
         path = '/' + pair + '/ticker'
         return self._query(self.end_point + path)
-    
+
     def get_depth(self, pair):
         path = '/' + pair + '/depth'
         return self._query(self.end_point + path)
-    
+
     def get_transactions(self, pair, yyyymmdd=None):
         path = '/' + pair + '/transactions'
         if yyyymmdd: path += '/' + yyyymmdd
         return self._query(self.end_point + path)
-    
+
     def get_candlestick(self, pair, candle_type, yyyymmdd):
         path = '/' + pair + '/candlestick/' + candle_type + '/' + yyyymmdd
         return self._query(self.end_point + path)
-    
