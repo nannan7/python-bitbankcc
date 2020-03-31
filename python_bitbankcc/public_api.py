@@ -39,7 +39,7 @@ class bitbankcc_public(object):
 
     def _query(self, query_url):
         try:
-            response = requests.get(query_url, timeout=1.0)
+            response = requests.get(query_url, timeout=5.0)
             return error_parser(response.json())
 
         except Exception as e:
