@@ -28,6 +28,7 @@ from .utils import error_parser
 from hashlib import sha256
 from logging import getLogger
 import requests, hmac, time, json
+from collections import defaultdict
 
 try:
     from urllib import urlencode
@@ -65,16 +66,32 @@ class bitbankcc_private(object):
         logger.debug('GET: ' + data)
         headers = make_header(data, self.api_key, self.api_secret)
         uri = self.end_point + path + urlencode(query)
-        response = requests.get(uri, headers=headers)
-        return error_parser(response.json())
+        try:
+            response = requests.get(uri, headers=headers, timeout=1.0)
+            return error_parser(response.json())
+        except Exception as e:
+            print(e.args)
+            tree = lambda: defaultdict(tree)
+            res = tree()
+            res['success'] = 0
+            res['data']['code'] = 0
+            return error_parser(res)
 
     def _post_query(self, path, query):
         data = json.dumps(query)
         logger.debug('POST: ' + data)
         headers = make_header(data, self.api_key, self.api_secret)
         uri = self.end_point + path
-        response = requests.post(uri, data=data, headers=headers)
-        return error_parser(response.json())
+        try:
+            response = requests.post(uri, data=data, headers=headers, timeout=1.0)
+            return error_parser(response.json())
+        except Exception as e:
+            print(e.args)
+            tree = lambda: defaultdict(tree)
+            res = tree()
+            res['success'] = 0
+            res['data']['code'] = 0
+            return error_parser(res)
 
     def get_asset(self):
         return self._get_query('/user/assets', {})
