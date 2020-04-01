@@ -67,7 +67,7 @@ class bitbankcc_private(object):
         headers = make_header(data, self.api_key, self.api_secret)
         uri = self.end_point + path + urlencode(query)
         try:
-            response = requests.get(uri, headers=headers, timeout=30.0)
+            response = requests.get(uri, headers=headers)
             return error_parser(response.json())
         except Exception as e:
             print(e.args)
@@ -83,7 +83,7 @@ class bitbankcc_private(object):
         headers = make_header(data, self.api_key, self.api_secret)
         uri = self.end_point + path
         try:
-            response = requests.post(uri, data=data, headers=headers, timeout=30.0)
+            response = requests.post(uri, data=data, headers=headers)
             return error_parser(response.json())
         except Exception as e:
             print(e.args)
