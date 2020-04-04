@@ -66,32 +66,16 @@ class bitbankcc_private(object):
         logger.debug('GET: ' + data)
         headers = make_header(data, self.api_key, self.api_secret)
         uri = self.end_point + path + urlencode(query)
-        try:
-            response = requests.get(uri, headers=headers)
-            return error_parser(response.json())
-        except Exception as e:
-            print(e.args)
-            tree = lambda: defaultdict(tree)
-            res = tree()
-            res['success'] = 0
-            res['data']['code'] = 0
-            return error_parser(res)
+        response = requests.get(uri, headers=headers)
+        return error_parser(response.json())
 
     def _post_query(self, path, query):
         data = json.dumps(query)
         logger.debug('POST: ' + data)
         headers = make_header(data, self.api_key, self.api_secret)
         uri = self.end_point + path
-        try:
-            response = requests.post(uri, data=data, headers=headers)
-            return error_parser(response.json())
-        except Exception as e:
-            print(e.args)
-            tree = lambda: defaultdict(tree)
-            res = tree()
-            res['success'] = 0
-            res['data']['code'] = 0
-            return error_parser(res)
+        response = requests.post(uri, data=data, headers=headers)
+        return error_parser(response.json())
 
     def get_asset(self):
         return self._get_query('/user/assets', {})
